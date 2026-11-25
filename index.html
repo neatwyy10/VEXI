@@ -152,7 +152,7 @@ let saved={};try{saved=JSON.parse(localStorage.getItem('vexi-v18')||localStorage
 let s={...initial,...saved};
 s.accent=s.accent||'mint';s.onboarded=s.onboarded??Object.keys(saved).length>0;
 s.sound=s.sound!==false && Number(s.volume)!==0; s.volume=200;
-const limit=v=>Math.max(0,Math.min(5,Math.trunc(Number(v)||0)));
+const limit=v=>Math.max(0,Math.min(8,Math.trunc(Number(v)||0)));
 s.week=(s.week||initial.week).map(limit); for(const d in (s.over||{})) s.over[d]=limit(s.over[d]); s.haptics=true;
 let sState={lang:s.lang||'ru'};
 let page='home', selected=today, month=today.slice(0,7), reportMonth=today.slice(0,7), mode='week', forecastMode='lessons', forecastLessons=0, forecastDays=[];
@@ -176,7 +176,7 @@ function override(d,v){if(isHoliday(d))return;s.over[d]=limit(v); save();}
 function resetDay(d){delete s.over[d]; save();}
 function setPage(p){const old=page; page=p; render(); const btn=$('nav').querySelector(`button[data-page="${p==='schedule'?'settings':p==='details'?'home':p}"]`); if(btn){btn.classList.remove('tab-pop'); void btn.offsetWidth; btn.classList.add('tab-pop');} if(old!==p){window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});} }
 function metric(v,l,c=''){return `<div class="stat-cell"><small>${l}</small><div class="metric ${c}">${v}</div></div>`}
-function stepper(v,fn,label,max=5){return `<div class="stepper" role="group" aria-label="${label}"><button aria-label="- ${label}" ${v<=0?'disabled':''} onclick="${fn}(${v-1})">−</button><b>${v}</b><button aria-label="+ ${label}" ${v>=max?'disabled':''} onclick="${fn}(${v+1})">+</button></div>`}
+function stepper(v,fn,label,max=8){return `<div class="stepper" role="group" aria-label="${label}"><button aria-label="- ${label}" ${v<=0?'disabled':''} onclick="${fn}(${v-1})">−</button><b>${v}</b><button aria-label="+ ${label}" ${v>=max?'disabled':''} onclick="${fn}(${v+1})">+</button></div>`}
 function setWeek(i,v){s.week[i]=limit(v); save();}
 function jumpLessons(){document.getElementById('lesson-editor')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})}
 function weekdayShort(d){return parse(d).toLocaleDateString(locales[sState.lang],{weekday:'short'})}
